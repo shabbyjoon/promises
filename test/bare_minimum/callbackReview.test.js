@@ -8,30 +8,42 @@ describe('Callback review', function() {
     var pluckFirstLineFromFile = callbackReview.pluckFirstLineFromFile;
 
     it('should accept a callback as its last argument', function(done) {
-      pluckFirstLineFromFile(__dirname + '/../files/file_to_read.txt', function() {
-        // If this asserion gets called, the callback was invoked correctly
-        // Otherwise, this test will timeout after 2000ms
-        expect(true).to.equal(true);
-        done();
-      });
+      pluckFirstLineFromFile(
+        __dirname + '/../files/file_to_read.txt',
+        function() {
+          // If this asserion gets called, the callback was invoked correctly
+          // Otherwise, this test will timeout after 2000ms
+          expect(true).to.equal(true);
+          done();
+        }
+      );
     });
 
-    it('should invoke the callback with an error as the first argument', function(done) {
-      pluckFirstLineFromFile(__dirname + '/../files/nonexistent_file.txt', function(err, firstLine) {
-        expect(err.code).to.equal('ENOENT');
-        expect(firstLine).to.not.exist;
-        done();
-      });
+    it('should invoke the callback with an error as the first argument', function(
+      done
+    ) {
+      pluckFirstLineFromFile(
+        __dirname + '/../files/nonexistent_file.txt',
+        function(err, firstLine) {
+          expect(err.code).to.equal('ENOENT');
+          expect(firstLine).to.not.exist;
+          done();
+        }
+      );
     });
 
-    it('should invoke the callback with the first line as the second argument', function(done) {
-      pluckFirstLineFromFile(__dirname + '/../files/file_to_read.txt', function(err, firstLine) {
+    it('should invoke the callback with the first line as the second argument', function(
+      done
+    ) {
+      pluckFirstLineFromFile(__dirname + '/../files/file_to_read.txt', function(
+        err,
+        firstLine
+      ) {
         expect(firstLine).to.equal('This is a file to read');
         expect(err).to.not.exist;
         done();
       });
     });
-
   });
 
   describe('getStatusCode', function() {
@@ -56,7 +68,9 @@ describe('Callback review', function() {
       });
     });
 
-    it('should invoke the callback with an error as the first argument', function(done) {
+    it('should invoke the callback with an error as the first argument', function(
+      done
+    ) {
       someNonExistantWebsite.get('/').reply(404);
 
       getStatusCode('https::///thisIsNoUrl.comedy', function(err, statusCode) {
@@ -66,7 +80,9 @@ describe('Callback review', function() {
       });
     });
 
-    it('should invoke the callback with the status code as the second argument', function(done) {
+    it('should invoke the callback with the status code as the second argument', function(
+      done
+    ) {
       google.get('/').reply(200);
 
       getStatusCode('https://google.com', function(err, statusCode) {
@@ -80,7 +96,5 @@ describe('Callback review', function() {
     after(function() {
       nock.cleanAll();
     });
-
   });
-
 });
